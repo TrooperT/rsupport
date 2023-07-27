@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sypha
+  namespace: sophia
+  labels:
+    app: sypha
+    component: server
+spec:
+  volumes:
+    - name: etc-dropbear
+      secret:
+        secretName: dropbear-rsa-host-key
+  containers:
+    - name: server
+      image: troopert/rsupport:latest
+      imagePullPolicy: Always
+      env:
+        - name: RSUPPORT_USER
+          valueFrom:
+            secretKeyRef:
+              name: rsupport-environment
+              key: RSUPPORT_USER
+        - name: RSUPPORT_UID
+          valueFrom:
+            secretKeyRef:
+              name: rsupport-environment
+              key: RSUPPORT_UID
+        - name: RSUPPORT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: rsupport-environment
+              key: RSUPPORT_PASS
+        - name: RSUPPORT_SSHPORT
+          valueFrom:
+            secretKeyRef:
+              name: rsupport-environment
+              key: RSUPPORT_SSHPORT
+        - name: RSUPPORT_ENABLE_PASSWORDAUTH
+          valueFrom:
+            secretKeyRef:
+              name: rsupport-environment
+              key: RSUPPORT_ENABLE_PASSWORDAUTH
+      volumeMounts:
+        - name: etc-dropbear
+          readOnly: true
+          mountPath: "/etc/dropbear"
