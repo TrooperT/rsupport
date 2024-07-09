@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.20
 WORKDIR /app
 # The SSH user to create
 RUN apk --no-cache add dropbear &&\
